@@ -5,7 +5,7 @@
 # █        INSTALLATION          █
 # █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 
-!git clone https://github.com/yourusername/cifar10-classifier.git
+!git clone https://github.com/hank-aa11/cifar10-classifier.git
 !cd cifar10-classifier && pip install -r requirements.txt
 ```
 
