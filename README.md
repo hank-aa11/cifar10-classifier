@@ -1,4 +1,4 @@
-# CIFAR-10 Classifier Notebook Guide
+# CIFAR-10 Classifier 
 
 ```python
 # █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
@@ -57,8 +57,8 @@ history = trainer.train(
 
 **Training Progress:**
 ```
-Epoch   1/100 | Train Loss: 2.1043 | Val Loss: 2.0214 | Val Acc: 0.2540 | LR: 0.00100
-Epoch   2/100 | Train Loss: 1.8732 | Val Loss: 1.8476 | Val Acc: 0.3212 | LR: 0.00095
+Epoch   1/30 | Train Loss: 2.1528 | Val Loss: 2.1670 | Val Acc: 0.3222 | LR: 0.00295
+Epoch   2/30 | Train Loss: 2.0489 | Val Loss: 2.0673 | Val Acc: 0.3498 | LR: 0.00280
 ...
 Early stopping at epoch 23
 Model saved to best_model.npy
@@ -75,8 +75,10 @@ AdvancedVisualizer.plot_metrics(history)  # Saves to metrics.png
 AdvancedVisualizer.plot_weights(model.params['W1'])  # Saves to weights.png
 ```
 
-![Training Metrics](https://via.placeholder.com/600x300.png?text=Training+Metrics)
-![Layer Weights](https://via.placeholder.com/600x300.png?text=First+Layer+Weights)
+[metrics](https://github.com/user-attachments/assets/9fd58c2a-258e-4922-b432-7dac50bc8491)
+
+[weights_vis](https://github.com/user-attachments/assets/d8d68129-886a-4f5f-ba11-45fa3dadc2ec)
+
 
 ```python
 # █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
@@ -98,5 +100,5 @@ print(f"\n⭐ Final Test Accuracy: {test_acc*100:.2f}%")
 **Output:**
 ```
 Loaded model from best_model.npy
-⭐ Final Test Accuracy: 52.34%
+⭐ Final Test Accuracy: 52.15%
 ```
