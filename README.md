@@ -46,6 +46,18 @@ pip install numpy matplotlib
 You can run the entire code with complete_code.py, or you can run it step by step using other modularized codes as follows.
 
 ### 1. Training the Model
+```python
+from utils import CIFAR10Processor
+from model import NeuralNetwork
+from train import SmartTrainer
+
+processor = CIFAR10Processor('path/to/cifar-10-batches-py')
+X_train, y_train, X_val, y_val, X_test, y_test = processor.load_split_data()
+
+model = NeuralNetwork(3072, 512, 10)
+trainer = SmartTrainer(model, X_val, y_val)
+history = trainer.train(X_train, y_train, lr=0.001, epochs=100)
+```
 Basic training (with default parameters):
 ```bash
 python train.py \
@@ -62,15 +74,20 @@ python train.py \
     --reg_lambda 0.0001 \
     --patience 7 \
     --save_model my_model.npy \
-    --epochs 200
+    --epochs 30
 ```
 
 ### 2. Hyperparameter Search
+```python
+from hyper_search import HyperOptimizer
+optimizer = HyperOptimizer(3072, 10)
+best_params, best_acc = optimizer.random_search(X_train, y_train, X_val, y_val)
+```
 ```bash
 python hyper_search.py \
     --data_dir /path/to/cifar-10-batches-py \
     --n_trials 50 \
-    --max_epochs 50 \
+    --max_epochs 30 \
     --output_log hparam_results.log
 ```
 
@@ -81,15 +98,10 @@ python test.py \
     --data_dir /path/to/cifar-10-batches-py \
     --hidden_dim 512
 ```
-Expected Output:
-```
-Loaded model from best_model.npy
-Test Accuracy: 52.15%
-```
 
 ### 4. Visualization
 Training Curves
-```bash
+```python
 import numpy as np
 from utils import AdvancedVisualizer
 
@@ -97,7 +109,7 @@ history = np.load('training_history.npy', allow_pickle=True).item()
 AdvancedVisualizer.plot_metrics(history)
 ```
 Weight Visualization
-```bash
+```python
 from model import NeuralNetwork
 from utils import AdvancedVisualizer
 
@@ -107,14 +119,14 @@ AdvancedVisualizer.plot_weights(model.params['W1'])
 ```
 
 ### 5.Reproducibility
-```bash
+```python
 import numpy as np
 np.random.seed(42)  # Before any other imports
 ```
 
 
 
-# CIFAR-10 Classifier Notebook Guide (easier)
+# CIFAR-10 Classifier Notebook Guide (vivid)
 
 ```python
 # █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
@@ -140,13 +152,6 @@ print(f"Validation set: {X_val.shape[0]} samples")
 print(f"Test set: {X_test.shape[0]} samples")
 ```
 
-**Output:**
-```
-Training set: 45000 samples
-Validation set: 5000 samples
-Test set: 10000 samples
-```
-
 ```python
 # █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 # █      TRAINING CELL         █
@@ -166,19 +171,11 @@ trainer = SmartTrainer(model, X_val, y_val)
 history = trainer.train(
     X_train, y_train,
     lr=0.001,
-    epochs=100,
+    epochs=30,
     batch_size=256
 )
 ```
 
-**Training Progress:**
-```
-Epoch   1/30 | Train Loss: 2.3166 | Val Loss: 2.3289 | Val Acc: 0.2364 | LR: 0.00050
-Epoch   2/30 | Train Loss: 2.2336 | Val Loss: 2.2487 | Val Acc: 0.2808 | LR: 0.00047
-...
-Early stopping at epoch 23
-Model saved to best_model.npy
-```
 
 ```python
 # █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
@@ -206,10 +203,4 @@ test_acc = evaluate_test_set(
 )
 
 print(f"\n⭐ Final Test Accuracy: {test_acc*100:.2f}%")
-```
-
-**Output:**
-```
-Loaded model from best_model.npy
-⭐ Final Test Accuracy: 52.15%
 ```
