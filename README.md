@@ -60,13 +60,13 @@ history = trainer.train(X_train, y_train, lr=0.001, epochs=100)
 ```
 Basic training (with default parameters):
 ```bash
-python train.py \
+!python train.py \
     --data_dir /path/to/cifar-10-batches-py \
     --save_model best_model.npy
 ```
 Custom training:
 ```bash
-python train.py \
+!python train.py \
     --data_dir /path/to/cifar-10-batches-py \
     --hidden_dim 1024 \
     --learning_rate 0.001 \
@@ -84,7 +84,7 @@ optimizer = HyperOptimizer(3072, 10)
 best_params, best_acc = optimizer.random_search(X_train, y_train, X_val, y_val)
 ```
 ```bash
-python hyper_search.py \
+!python hyper_search.py \
     --data_dir /path/to/cifar-10-batches-py \
     --n_trials 50 \
     --max_epochs 30 \
@@ -93,7 +93,7 @@ python hyper_search.py \
 
 ### 3. Evaluating on Test Set
 ```bash
-python test.py \
+!python test.py \
     --model_path best_model.npy \
     --data_dir /path/to/cifar-10-batches-py \
     --hidden_dim 512
