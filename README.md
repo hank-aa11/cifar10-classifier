@@ -11,11 +11,11 @@ A three-layer neural network implementation for CIFAR-10 classification, featuri
 - 📊 Training visualization
 
 ## Project Structure
+- data_processor.py
 - model.py 
 - train.py
-- test.py 
-- hyper_search.py 
-- utils.py 
+- hyper_optimizer.py
+- visualizer.py
 - complete_code.py 
 - README.md
 
@@ -24,7 +24,6 @@ A three-layer neural network implementation for CIFAR-10 classification, featuri
 1. Clone repository:
 ```bash
 ！git clone https://github.com/hank-aa11/cifar10-classifier.git
-cd cifar10-classifier
 ```
 2. Install dependencies:
 ```bash
@@ -44,163 +43,89 @@ pip install numpy matplotlib
 
 ## Usage
 You can run the entire code with complete_code.py, or you can run it step by step using other modularized codes as follows.
-
-### 1. Training the Model
-```python
-from utils import CIFAR10Processor
-from model import NeuralNetwork
-from train import SmartTrainer
-
-processor = CIFAR10Processor('path/to/cifar-10-batches-py')
-X_train, y_train, X_val, y_val, X_test, y_test = processor.load_split_data()
-
-model = NeuralNetwork(3072, 512, 10)
-trainer = SmartTrainer(model, X_val, y_val)
-history = trainer.train(X_train, y_train, lr=0.001, epochs=100)
-```
-Basic training (with default parameters):
-```bash
-!python train.py \
-    --data_dir /path/to/cifar-10-batches-py \
-    --save_model best_model.npy
-```
-Custom training:
-```bash
-!python train.py \
-    --data_dir /path/to/cifar-10-batches-py \
-    --hidden_dim 1024 \
-    --learning_rate 0.001 \
-    --batch_size 256 \
-    --reg_lambda 0.0001 \
-    --patience 7 \
-    --save_model my_model.npy \
-    --epochs 30
-```
-
-### 2. Hyperparameter Search
-```python
-from hyper_search import HyperOptimizer
-optimizer = HyperOptimizer(3072, 10)
-best_params, best_acc = optimizer.random_search(X_train, y_train, X_val, y_val)
-```
-```bash
-!python hyper_search.py \
-    --data_dir /path/to/cifar-10-batches-py \
-    --n_trials 50 \
-    --max_epochs 30 \
-    --output_log hparam_results.log
-```
-
-### 3. Evaluating on Test Set
-```bash
-!python test.py \
-    --model_path best_model.npy \
-    --data_dir /path/to/cifar-10-batches-py \
-    --hidden_dim 512
-```
-
-### 4. Visualization
-Training Curves
 ```python
 import numpy as np
-from utils import AdvancedVisualizer
+import pickle
+import os
+import matplotlib.pyplot as plt
+from typing import Dict, Tuple, List, Optional
 
-history = np.load('training_history.npy', allow_pickle=True).item()
-AdvancedVisualizer.plot_metrics(history)
+from cifar10_classifier.data_processor import CIFAR10Processor
+from cifar10_classifier.model import NeuralNetwork
+from cifar10_classifier.trainer import SmartTrainer
+from cifar10_classifier.hyper_optimizer import HyperOptimizer
+from cifar10_classifier.visualizer import AdvancedVisualizer
+
+def main():
+    # 初始化配置
+    DATA_PATH = '/kaggle/input/cifar-10/cifar-10-batches-py/'
+    SEED = 42
+    np.random.seed(SEED)
+    
+    # 数据准备
+    processor = CIFAR10Processor(DATA_PATH)
+    X_train, y_train, X_val, y_val, X_test, y_test = processor.load_split_data()
+    
+    # 超参数优化
+    optimizer = HyperOptimizer(input_dim=3072, output_dim=10)
+    best_hp, best_acc = optimizer.random_search(X_train, y_train, X_val, y_val)
+    
+    # 最终训练
+    final_model = NeuralNetwork(
+        input_dim=3072,
+        hidden_dim=best_hp['hidden_dim'],
+        output_dim=10,
+        reg_lambda=best_hp['reg']
+    )
+    
+    trainer = SmartTrainer(final_model, X_val, y_val, patience=5)
+    history = trainer.train(
+        X_train, y_train,
+        lr=best_hp['lr'],
+        epochs=200,
+        batch_size=best_hp['batch_size']
+    )
+    
+    # 测试评估
+    probs = final_model.forward(X_test)
+    test_acc = np.mean(np.argmax(probs, axis=1) == np.argmax(y_test, axis=1))
+    print(f"\nFinal Test Accuracy: {test_acc:.4f}")
+    
+    # 可视化结果
+    AdvancedVisualizer.plot_metrics(history)
+    AdvancedVisualizer.plot_weights(final_model.params['W1'])
+
+
+if __name__ == "__main__":
+    main()
 ```
-Weight Visualization
-```python
-from model import NeuralNetwork
-from utils import AdvancedVisualizer
-
-model = NeuralNetwork(3072, 512, 10)
-model.params = np.load('best_model.npy', allow_pickle=True).item()
-AdvancedVisualizer.plot_weights(model.params['W1'])
-```
-
-### 5.Reproducibility
-```python
-import numpy as np
-np.random.seed(42)  # Before any other imports
-```
-
-
-
-# CIFAR-10 Classifier Notebook Guide (vivid)
 
 ```python
 # █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 # █        INSTALLATION          █
 # █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
-
-!git clone https://github.com/hank-aa11/cifar10-classifier.git
-!cd cifar10-classifier && pip install -r requirements.txt
 ```
 
 ```python
 # █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 # █       DATA PREP CELL        █
 # █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
-
-from utils import CIFAR10Processor
-
-processor = CIFAR10Processor("/path/to/cifar-10-batches-py")
-X_train, y_train, X_val, y_val, X_test, y_test = processor.load_split_data()
-
-print(f"Training set: {X_train.shape[0]} samples")
-print(f"Validation set: {X_val.shape[0]} samples")
-print(f"Test set: {X_test.shape[0]} samples")
 ```
 
 ```python
 # █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 # █      TRAINING CELL         █
 # █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
-
-from model import NeuralNetwork
-from train import SmartTrainer
-
-model = NeuralNetwork(
-    input_dim=3072,
-    hidden_dim=512,
-    output_dim=10,
-    reg_lambda=0.0001
-)
-
-trainer = SmartTrainer(model, X_val, y_val)
-history = trainer.train(
-    X_train, y_train,
-    lr=0.001,
-    epochs=30,
-    batch_size=256
-)
 ```
-
 
 ```python
 # █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 # █    VISUALIZATION CELL      █
 # █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
-
-from utils import AdvancedVisualizer
-
-AdvancedVisualizer.plot_metrics(history)  # Saves to metrics.png
-AdvancedVisualizer.plot_weights(model.params['W1'])  # Saves to weights.png
 ```
 
 ```python
 # █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 # █      EVALUATION CELL       █
 # █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
-
-from test import evaluate_test_set
-
-test_acc = evaluate_test_set(
-    model_path="best_model.npy",
-    X_test=X_test,
-    y_test=y_test,
-    hidden_dim=512
-)
-
-print(f"\n⭐ Final Test Accuracy: {test_acc*100:.2f}%")
 ```
