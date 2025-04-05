@@ -1,3 +1,6 @@
+import numpy as np
+from typing import Dict, List
+
 # ==================== 训练优化模块 ====================
 class SmartTrainer:
     """智能训练器（支持早停、学习率调度等）"""
