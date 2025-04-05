@@ -1,3 +1,6 @@
+import numpy as np
+from typing import Dict, Tuple
+
 # ==================== 超参数优化模块 ====================
 class HyperOptimizer:
     """并行化超参数优化器"""
