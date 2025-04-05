@@ -1,4 +1,5 @@
 import numpy as np
+from typing import Dict
 
 class NeuralNetwork:
     """三层神经网络"""
