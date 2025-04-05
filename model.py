@@ -1,3 +1,6 @@
+import numpy as np
+from typing import Dict
+
 # ==================== 神经网络核心模块 ====================
 class NeuralNetwork:
     """三层神经网络"""
