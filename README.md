@@ -50,11 +50,11 @@ import os
 import matplotlib.pyplot as plt
 from typing import Dict, Tuple, List, Optional
 
-from cifar10_classifier.data_processor import CIFAR10Processor
-from cifar10_classifier.model import NeuralNetwork
-from cifar10_classifier.trainer import SmartTrainer
-from cifar10_classifier.hyper_optimizer import HyperOptimizer
-from cifar10_classifier.visualizer import AdvancedVisualizer
+from data_processor import CIFAR10Processor
+from model import NeuralNetwork
+from trainer import SmartTrainer
+from hyper_optimizer import HyperOptimizer
+from visualizer import AdvancedVisualizer
 
 def main():
     # 初始化配置
