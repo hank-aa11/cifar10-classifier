@@ -58,8 +58,8 @@ from cifar10_classifier.visualizer import AdvancedVisualizer
 
 def main():
     # 初始化配置
-    DATA_PATH = '/kaggle/input/cifar-10/cifar-10-batches-py/'
-    SEED = 42
+    DATA_PATH = 'path/to/cifar-10-batches-py/'#cifar-10-batches-py在您电脑上的位置
+    SEED = 42 #任意正整数
     np.random.seed(SEED)
     
     # 数据准备
