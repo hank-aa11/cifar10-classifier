@@ -1,5 +1,6 @@
 import numpy as np
 from typing import Dict, List
+from model import NeuralNetwork
 
 # ==================== 训练优化模块 ====================
 class SmartTrainer:
