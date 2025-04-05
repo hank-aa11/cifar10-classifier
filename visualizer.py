@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 # ==================== 可视化模块 ====================
 class AdvancedVisualizer:
     """可视化工具"""
