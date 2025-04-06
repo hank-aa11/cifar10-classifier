@@ -1,5 +1,7 @@
 import numpy as np
 from typing import Dict, Tuple
+from model import NeuralNetwork
+from train import SmartTrainer
 
 # ==================== 超参数优化模块 ====================
 class HyperOptimizer:
