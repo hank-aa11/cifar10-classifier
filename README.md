@@ -24,7 +24,7 @@ A three-layer neural network implementation for CIFAR-10 classification, featuri
 1. Clone repository:
 ```bash
 !git clone https://github.com/hank-aa11/cifar10-classifier.git
-!cd cifar10-classifier
+%cd cifar10-classifier
 ```
 2. Install dependencies:
 ```bash
