@@ -13,7 +13,7 @@ A three-layer neural network implementation for CIFAR-10 classification, featuri
 ## Project Structure
 - data_processor.py
 - model.py 
-- train.py
+- trainer.py
 - hyper_optimizer.py
 - visualizer.py
 - complete_code.py 
