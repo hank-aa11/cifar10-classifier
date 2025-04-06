@@ -1,5 +1,5 @@
 import numpy as np
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List, Optional
 from model import NeuralNetwork
 from train import SmartTrainer
 
