@@ -1,7 +1,7 @@
 import numpy as np
 from typing import Dict, Tuple, List, Optional
 from model import NeuralNetwork
-from train import SmartTrainer
+from trainer import SmartTrainer
 
 # ==================== 超参数优化模块 ====================
 class HyperOptimizer:
