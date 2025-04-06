@@ -59,7 +59,7 @@ from visualizer import AdvancedVisualizer
 
 def main():
     # 初始化配置
-    DATA_PATH = 'path/to/cifar-10-batches-py/'#cifar-10-batches-py在您电脑上的位置
+    DATA_PATH = '/path/to/cifar-10-batches-py/'#cifar-10-batches-py在您电脑上的位置
     SEED = 42 #任意正整数
     np.random.seed(SEED)
     
