@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from typing import Dict, Tuple, List, Optional
 
 from model import NeuralNetwork
 from trainer import SmartTrainer
