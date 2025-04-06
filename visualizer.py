@@ -1,5 +1,6 @@
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+
 from model import NeuralNetwork
 from trainer import SmartTrainer
 from hyper_optimizer import HyperOptimizer
