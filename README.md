@@ -53,7 +53,7 @@ from typing import Dict, Tuple, List, Optional
 
 from data_processor import CIFAR10Processor
 from model import NeuralNetwork
-from train import SmartTrainer
+from trainer import SmartTrainer
 from hyper_optimizer import HyperOptimizer
 from visualizer import AdvancedVisualizer
 
